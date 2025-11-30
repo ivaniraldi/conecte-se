@@ -11,7 +11,7 @@ Website corporativo da Conecte-Se, representante oficial especializada em soluç
 
 ## 📋 Estrutura do Projeto
 
-```
+``` 
 website-build/
 ├── app/                    # Páginas da aplicação (Next.js App Router)
 │   ├── contato/           # Página de contato
