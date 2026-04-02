@@ -3,9 +3,13 @@ import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Shield, Award, CheckCircle2 } from "lucide-react"
+import { getSiteContent, getWhatsAppLink } from "@/lib/get-content"
 
-export default function QuemSomos() {
-  const whatsappLink = "https://wa.me/5548913052259?text=Olá! Gostaria de saber mais sobre a empresa."
+export default async function QuemSomos() {
+  const content = await getSiteContent('quem-somos');
+  const whatsappLink = await getWhatsAppLink();
+
+  const enrichedContent = { ...content, whatsapp_link: whatsappLink };
 
   return (
     <main className="min-h-screen bg-background">
@@ -14,12 +18,10 @@ export default function QuemSomos() {
       <section className="pt-32 pb-20 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Conecte-Se: Seu Parceiro em Soluções Tecnológicas Corporativas
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance"
+                dangerouslySetInnerHTML={{ __html: content.title || "Conecte-Se: Seu Parceiro em Soluções Tecnológicas Corporativas" }} />
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
-              Somos uma representante oficial especializada em fornecer soluções corporativas de tecnologia para empresas e órgãos públicos.
-              Conectamos você às melhores marcas e produtos do mercado com suporte técnico especializado e atendimento personalizado.
+              {content.description || "Somos uma representante oficial especializada em fornecer soluções corporativas de tecnologia para empresas e órgãos públicos. Conectamos você às melhores marcas e produtos do mercado com suporte técnico especializado e atendimento personalizado."}
             </p>
           </div>
 

@@ -1,14 +1,37 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function WhatsAppButton() {
+  const [whatsappInfo, setWhatsappInfo] = useState({ 
+    number: "5548913052259", 
+    message: "Olá! Gostaria de mais informações sobre as soluções da Conecte-Se." 
+  })
+
+  useEffect(() => {
+    async function fetchGlobal() {
+      try {
+        const response = await fetch("/api/admin/content")
+        const data = await response.json()
+        const globalContent = data.content.filter((c: any) => c.page === 'global')
+        
+        const number = globalContent.find((c: any) => c.key === 'whatsapp_number')?.value
+        const message = globalContent.find((c: any) => c.key === 'whatsapp_message')?.value
+        
+        if (number) setWhatsappInfo(prev => ({ ...prev, number }))
+        if (message) setWhatsappInfo(prev => ({ ...prev, message }))
+      } catch (err) {
+        console.error("Error fetching global info:", err)
+      }
+    }
+    fetchGlobal()
+  }, [])
+
   const handleWhatsAppClick = () => {
-    window.open(
-      "https://wa.me/5548913052259?text=Olá! Gostaria de mais informações sobre as soluções da Conecte-Se.",
-      "_blank",
-    )
+    const url = `https://wa.me/${whatsappInfo.number}?text=${encodeURIComponent(whatsappInfo.message)}`
+    window.open(url, "_blank")
   }
 
   return (

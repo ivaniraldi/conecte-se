@@ -6,7 +6,27 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
 export function Header() {
-  const whatsappLink = "https://wa.me/5548913052259?text=Olá! Gostaria de solicitar um orçamento."
+  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/5548913052259?text=Olá! Gostaria de solicitar um orçamento.")
+
+  useEffect(() => {
+    async function fetchGlobal() {
+      try {
+        const response = await fetch("/api/admin/content")
+        const data = await response.json()
+        const globalContent = data.content.filter((c: any) => c.page === 'global')
+        
+        const number = globalContent.find((c: any) => c.key === 'whatsapp_number')?.value
+        const message = globalContent.find((c: any) => c.key === 'whatsapp_message')?.value
+        
+        if (number && message) {
+          setWhatsappLink(`https://wa.me/${number}?text=${encodeURIComponent(message)}`)
+        }
+      } catch (err) {
+        console.error("Error fetching global info:", err)
+      }
+    }
+    fetchGlobal()
+  }, [])
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

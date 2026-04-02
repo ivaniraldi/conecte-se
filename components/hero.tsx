@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageSquare } from "lucide-react"
 
-export function Hero() {
-  const whatsappLink = "https://wa.me/5548913052259?text=Olá! Gostaria de solicitar um orçamento."
+interface HeroProps {
+  content: Record<string, string>;
+}
+
+export function Hero({ content }: HeroProps) {
+  const whatsappLink = content.whatsapp_link || "https://wa.me/5548913052259?text=Olá! Gostaria de solicitar um orçamento."
 
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -16,7 +20,7 @@ export function Hero() {
 
       <div className="absolute inset-0 z-0">
         <img
-          src="/modern-technology-circuit-board-with-blue-lights-a.jpg"
+          src={content.image || "/modern-technology-circuit-board-with-blue-lights-a.jpg"}
           alt="Technology Background"
           className="w-full h-full object-cover opacity-10"
         />
@@ -38,24 +42,24 @@ export function Hero() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
-            Soluções Corporativas em <span className="text-primary">Tecnologia</span> e Hardware
-          </h1>
+          <h1 
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight"
+            dangerouslySetInnerHTML={{ __html: content.title || 'Soluções Corporativas em <span class="text-primary">Tecnologia</span> e Hardware' }}
+          />
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty leading-relaxed">
-            Representante oficial especializada em equipamentos de tecnologia para empresas e órgãos públicos.
-            Qualidade, suporte técnico e soluções personalizadas para seu negócio.
+            {content.description || 'Representante oficial especializada em equipamentos de tecnologia para empresas e órgãos públicos. Qualidade, suporte técnico e soluções personalizadas para seu negócio.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button asChild size="lg" className="w-full sm:w-auto group">
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                Solicitar Cotação
+                {content.button1_text || 'Solicitar Cotação'}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-transparent group">
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                 <MessageSquare className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                Fale com consultor
+                {content.button2_text || 'Fale com consultor'}
               </a>
             </Button>
           </div>
